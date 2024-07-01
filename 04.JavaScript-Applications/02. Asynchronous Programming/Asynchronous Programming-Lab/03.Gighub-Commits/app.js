@@ -34,3 +34,4 @@ async function loadCommits() {
         commitsList.appendChild(li);
     }
 }
+
