@@ -1,0 +1,16 @@
+{
+  "name": "workforce-managment-resources",
+  "version": "1.0.0",
+  "main": "worforceManagment.test.js",
+  "type": "module",
+  "scripts": {
+    "test": "mocha --loader ts-node/esm"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "chai": "^5.1.1",
+    "mocha": "^10.4.0"
+  }
+}

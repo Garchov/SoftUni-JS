@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>DOM Events | Movie List</h1>
+<style>
+  li{
+    cursor: pointer;
+  }
+</style>
+    <ul id="movie-list">
+      <li>The Matrix</li>
+      <li>Hangover</li>
+      <li>The Godfather</li>
+      <li>Breaking bad</li>
+    </ul>
+
+    <script>
+      let headingElement =document.querySelector("h1");
+      let movieElement = document.querySelectorAll("#movie-list li");
+      console.log(headingElement.parentElement.parentElement.parentElement );
+      
+      movieElement.forEach((el) => {
+        el.addEventListener("click", (e) => {
+          e.currentTarget.style.textDecoration = "line-through";
+        });
+      });
+    </script>
+  </body>
+</html>

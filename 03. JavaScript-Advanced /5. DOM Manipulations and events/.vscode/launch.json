@@ -1,0 +1,14 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Open index.html",
+            "file": "/Users/dimitargarchov/Documents/JS_learning/SoftUni-JS/03. JavaScript-Advanced/5. DOM Manipulations and events/b-event-handling/index.html"
+        }
+    ]
+}

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DOM PART 1</title>
+  </head>
+  <h1 id="heading">Hello Dom!</h1>
+  <ul>
+    <li>BMW</li>
+    <li>Mercedes</li>
+    <li id="audi-car">Audi</li>
+  </ul>
+  <body>
+    <button onclick="changeTitle()">Send</button>
+    <button onclick="onButtonClick()">Second</button>
+    <button onclick="changeCar()">changeCar</button>
+
+    <script>
+      function onButtonClick() {
+        let name = "Pesho";
+        console.log(name);
+      }
+
+      function changeTitle() {
+        let headingElement = document.getElementById("heading");
+        headingElement.textContent = "Hello from JS";
+      }
+      function changeCar(){
+        let carElement=document.getElementById("audi-car");
+        carElement.textContent="Audi Q7";
+      }
+    </script>
+    <script src="domFirstTest.js"></script>
+  </body>
+</html>
