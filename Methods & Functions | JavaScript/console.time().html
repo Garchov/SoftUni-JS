@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <!-- !console.time() = tool that allows you to measure the time it takes
+                    !         for a section of code or process to execute
+                    !        Great for identifying performance "bottlenecks"
+                            --!---->
+
+    <script>
+      console.time("test");
+
+      for (let i = 0; i < 10; i++) {
+        //do some code here...
+        console.log(i);
+      }
+
+      console.timeEnd("test");// test: 0.19384765625 ms
+    </script>
+
+  </head>
+  <body></body>
+</html>
