@@ -21,7 +21,7 @@ async function getMessages() {
     const url = `http://localhost:3030/jsonstore/messenger`;
     const response = await fetch(url);
     const data = await response.json();
-
+debugger
     const messages = Object.values(data).map(x => `${x.author}: ${x.content}`).join('\n');
     document.getElementById('messages').value = messages;
 }

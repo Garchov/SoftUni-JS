@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+      label {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <form id="create">
+      <h2>Create Record</h2>
+      <label>Name: <input type="text" name="name"></label>
+      <label>Age: <input type="text" name="age"></label>
+      <input type="submit" value="Send Data">
+    </form>
+
+    <table id="content">
+      <thead>
+        <tr>
+          <td>Id</td>
+          <td>Name</td>
+          <td>Age</td>
+          <td>Controls</td>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <form id="edit">
+      <h2>Update Record</h2>
+      <input type="hidden" name="_id">
+      <label>Name: <input type="text" name="name"></label>
+      <label>Age: <input type="text" name="age"></label>
+      <input type="submit" value="Save" disabled>
+    </form>
+
+    <script src="index.js"></script>
+  </body>
+</html>
