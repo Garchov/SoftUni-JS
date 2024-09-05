@@ -1,0 +1,24 @@
+{
+  "name": "03.search-in-list",
+  "version": "1.0.0",
+  "main": "search.js",
+  "directories": {
+    "test": "tests"
+  },
+  "type": "module",
+  "scripts": {
+    "test": "mocha tests/e2e.test.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "lit-html": "^3.2.0",
+    "playwright-chromium": "^1.46.0"
+  },
+  "devDependencies": {
+    "chai": "^5.1.1",
+    "mocha": "^10.7.0"
+  }
+}

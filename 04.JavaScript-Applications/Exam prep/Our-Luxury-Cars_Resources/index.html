@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Luxury Cars</title>
+    <link rel="stylesheet" href="./styles/styles.css">
+    <script type="module" src="./src/app.js"></script>
+</head>
+<body>
+    <!-- Notifications -->
+    <section id="notifications">
+      <div id="errorBox" class="notification">
+        <span class="msg">MESSAGE</span>
+      </div>
+    </section>
+
+    <div id="wrapper">
+      <header>
+        <!-- Navigation -->
+        <a id="logo" href="/">
+          <img id="logo-img" src="./images/logo.png" alt="logo" />
+        </a>
+        <nav>
+          <div>
+            <a href="/catalog">Our Cars</a>
+          </div>
+
+          <!-- Logged-in users -->
+          <div class="user" style="display: none;">
+            <a href="/create">Add Your Car</a>
+            <a href="javascript:void(0)" id="logout">Logout</a>
+          </div>
+
+          <!-- Guest users -->
+          <div class="guest">
+            <a href="/login">Login</a>
+            <a href="/register">Register</a>
+          </div>
+        </nav>
+      </header>
+
+      <main id="main-element">
+        <!-- Dynamic content will be injected here by JavaScript -->
+      </main>
+    </div>
+
+    <footer>
+      <p>SoftUni Exam 2024 &copy;</p>
+    </footer>
+
+
+
+
+
+</body>
+</html>

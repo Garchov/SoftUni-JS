@@ -1,65 +1,54 @@
-function attachEvents() {
-    const posts = document.getElementById('posts');
+async function attachEvents() {
 
-    document.getElementById('btnLoadPosts').addEventListener('click', async () => {
-        const url = `http://localhost:3030/jsonstore/blog/posts`;
-
-        const response = await fetch(url);
-        const data = await response.json();
-
-        Object.values(data).forEach(p => {
-            const option = createElement('option', p.title, ['value', p.id]);
-            posts.appendChild(option);
-        })
-    });
-
-    document.getElementById('btnViewPost').addEventListener('click', async () => {
-        const id = posts.value;
-
-        const post = await getPostInfo(id);
-
-        document.getElementById('post-title').textContent = post.title;
-        document.getElementById('post-body').textContent = post.body;
-
-        const url = `http://localhost:3030/jsonstore/blog/comments`;
-
-        const response = await fetch(url);
-        const data = await response.json();
-
-        const comments = Object.values(data).filter(x => x.postId == id);
-
-        const postComments = document.getElementById('post-comments');
-
-        postComments.innerHTML = '';
-
-        comments.forEach(c => {
-            const comment = createElement('li', c.text, ['id', c.id]);
-            postComments.appendChild(comment);
-        });
-    });
-
-    async function getPostInfo(id) {
-        const url = `http://localhost:3030/jsonstore/blog/posts/${id}`;
-
-        const response = await fetch(url);
-        const data = await response.json();
-
-        return data;
+    const endPoints = {
+        posts: 'http://localhost:3030/jsonstore/blog/posts',
+        comments: 'http://localhost:3030/jsonstore/blog/comments'
     }
 
-    function createElement(type, content, attributes = []) {
-        const element = document.createElement(type);
+    const selectMenu = document.getElementById('posts');
+    const loadBtn = document.getElementById('btnLoadPosts');
+    loadBtn.addEventListener('click', load);
+    const viewBtn = document.getElementById('btnViewPost');
+    viewBtn.addEventListener('click', view);
+    let data;
 
-        if (content) {
-            element.textContent = content;
+    async function load(event) {
+        let loadResponse = await fetch(endPoints.posts);
+        let dataPosts = await loadResponse.json();
+        data = dataPosts;
+
+        for (let el of Object.keys(dataPosts)) {
+            let elOption = document.createElement('option');
+            elOption.value = el;
+            elOption.textContent = dataPosts[el].title;
+            selectMenu.appendChild(elOption);
         }
-
-        if (attributes.length > 0) {
-            element.setAttribute(attributes[0], attributes[1]);
-        }
-
-        return element;
     }
+
+    async function view(event) {
+        const elUl = document.getElementById('post-comments');
+        elUl.innerHTML = '';
+
+        let viewResponse = await fetch(endPoints.comments);
+        let viewData = await viewResponse.json();
+        
+
+        let selectedPostRef = document.getElementById('posts');
+        let selectedPost = selectedPostRef.value;
+        const elH1 = document.getElementById('post-title');
+        elH1.textContent = selectedPostRef.options[selectedPostRef.selectedIndex].text;
+        const elP = document.getElementById('post-body');
+        elP.textContent = data[selectedPost].body;
+        for (const el of Object.values(viewData)) {
+            if (el.postId === selectedPost) {
+                let elLi = document.createElement('li');
+                elLi.id = el.id;
+                elLi.textContent = el.text;
+                elUl.appendChild(elLi);
+            }
+        }
+    }
+
 }
 
 attachEvents();

@@ -1,154 +1,151 @@
-function bookLibrary() {
-    document.getElementById('loadBooks').addEventListener('click', loadAllBooks);
+function solve() {
+    const loadBooksBtn = document.getElementById('loadBooks');
+    const tableBodyRef = document.querySelector('tbody');
+    const formRef = document.querySelector('form');
+    const URL = 'http://localhost:3030/jsonstore/collections/books';
 
-    document.getElementById('createForm').addEventListener('submit', createBook);
+    let currentId = null;
 
-    document.querySelector('table').addEventListener('click', handleTableClick);
+    loadBooksBtn.addEventListener('click', onLoad);
 
-    document.getElementById('editForm').addEventListener('submit', updateBook);
-}
+    formRef.addEventListener('submit', onSubmit);
 
-bookLibrary();
-
-async function request(url, options) {
-    const response = await fetch(url, options);
-
-    if (response.ok != true) {
-        const error = await response.json();
-        alert(error.message);
-        throw new Error(error.message);
+    async function onLoad() {
+        try {
+            const response = await fetch(URL);
+            if (!response.ok) {
+                throw new Error('Failed to load books');
+            }
+            const data = await response.json();
+            clearTable();
+            Object.entries(data).forEach(([id, book]) => {
+                const row = createTableRow(id, book);
+                tableBodyRef.appendChild(row);
+            });
+        } catch (error) {
+            console.error('Error loading books:', error);
+        }
     }
 
-    const data = await response.json();
-    return data;
-}
+    function createTableRow(id, book) {
+        const row = document.createElement('tr');
+        row.id = id;
 
-async function loadAllBooks() {
-    const books = await request('http://localhost:3030/jsonstore/collections/books');
+        const titleTd = document.createElement('td');
+        titleTd.textContent = book.title;
 
-    const rows = Object.entries(books).map(createRow).join('');
+        const authorTd = document.createElement('td');
+        authorTd.textContent = book.author;
 
-    document.querySelector('body > table > tbody').innerHTML = rows;
-}
+        const actionsTd = document.createElement('td');
+        const editBtn = document.createElement('button');
+        editBtn.textContent = 'Edit';
+        editBtn.addEventListener('click', () => startEdit(id, book));
 
-function handleTableClick(event) {
-    if (event.target.className == 'deleteBtn') {
-        deleteBook(event.target.parentNode.parentNode.id);
-    } else if (event.target.className == 'editBtn') {
-        document.getElementById('createForm').style.display = 'none';
-        document.getElementById('editForm').style.display = 'block';
+        const deleteBtn = document.createElement('button');
+        deleteBtn.textContent = 'Delete';
+        deleteBtn.addEventListener('click', () => deleteBook(id));
 
-        loadBookForEditting(event.target.parentNode.parentNode.id);
+        actionsTd.appendChild(editBtn);
+        actionsTd.appendChild(deleteBtn);
+
+        row.appendChild(titleTd);
+        row.appendChild(authorTd);
+        row.appendChild(actionsTd);
+
+        return row;
     }
-}
 
-function createRow([id, book]) {
-    // const tr = createElement('tr', '', ['data-id', id]);
+    function startEdit(id, book) {
+        currentId = id;
+        formRef.querySelector('input[name="title"]').value = book.title;
+        formRef.querySelector('input[name="author"]').value = book.author;
+        formRef.querySelector('button').textContent = 'Save';
+        formRef.querySelector('button').removeEventListener('click', onSubmit);
+        formRef.querySelector('button').addEventListener('click', onSave);
+        formRef.style.display = 'block';
+    }
 
-    // const title = createElement('td', book.title);
-    // const author = createElement('td', book.author);
+    async function onSubmit(event) {
+        event.preventDefault();
 
-    // const td = createElement('td');
+        const formData = new FormData(formRef);
+        const title = formData.get('title').trim();
+        const author = formData.get('author').trim();
 
-    // const editBtn = createElement('button', 'Edit');
-    // const deleteBtn = createElement('button', 'Delete');
+        if (!title || !author) {
+            return alert('Both fields are required.');
+        }
 
-    // td.appendChild(editBtn);
-    // td.appendChild(deleteBtn);
+        try {
+            await createBook({ title, author });
+            formRef.reset();
+            onLoad();
+        } catch (error) {
+            console.error('Error creating book:', error);
+        }
+    }
 
-    // tr.appendChild(title);
-    // tr.appendChild(author);
-    // tr.appendChild(td);
-
-    // editBtn.addEventListener('click', updateBook);
-    // deleteBtn.addEventListener('click', deleteBook);
-
-    // //console.log(tr);
-    // return tr;
-    // //return tr.toString();
-
-    return `<tr id="${id}"><td>${book.title}</td> <td>${book.author}</td> <td><button class="editBtn">Edit</button><button class="deleteBtn">Delete</button></td></tr>`;
-}
-
-async function createBook(event) {
-    event.preventDefault();
-
-    var formData = new FormData(event.target);
-
-    const title = formData.get('title');
-    const author = formData.get('author');
-
-    if (title && author) {
-        const book = { title: title, author: author };
-
-        event.target.reset();
-
-        await request('http://localhost:3030/jsonstore/collections/books', {
-            method: 'post',
+    async function createBook(book) {
+        const response = await fetch(URL, {
+            method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(book),
         });
-
-        // bonus auto refresh
-        await loadAllBooks();
+        if (!response.ok) {
+            throw new Error('Failed to create book');
+        }
     }
-}
 
-async function updateBook(event) {
-    event.preventDefault();
+    async function onSave(event) {
+        event.preventDefault();
 
-    var formData = new FormData(event.target);
+        const fullPatch = `${URL}/${currentId}`;
 
-    const id = formData.get('id');
-    const title = formData.get('title');
-    const author = formData.get('author');
+        const formData = new FormData(formRef);
+        const title = formData.get('title').trim();
+        const author = formData.get('author').trim();
 
-    if (title && author) {
-        const book = { title: title, author: author };
+        if (!title || !author) {
+            return alert('Both fields are required.');
+        }
 
-        event.target.reset();
+        try {
+            await updateBook(currentId, { title, author });
+            formRef.reset();
+            formRef.querySelector('button').textContent = 'Submit';
+            formRef.querySelector('button').removeEventListener('click', onSave);
+            formRef.querySelector('button').addEventListener('click', onSubmit);
+            formRef.style.display = 'none';
+            onLoad();
+        } catch (error) {
+            console.error('Error updating book:', error);
+        }
+    }
 
-        await request(`http://localhost:3030/jsonstore/collections/books/${id}`, {
-            method: 'put',
+    async function updateBook(id, book) {
+        const response = await fetch(`${URL}/${id}`, {
+            method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(book),
         });
+        if (!response.ok) {
+            throw new Error('Failed to update book');
+        }
+    }
 
-        document.getElementById('createForm').style.display = 'block';
-        document.getElementById('editForm').style.display = 'none';
+    async function deleteBook(id) {
+        try {
+            await fetch(`${URL}/${id}`, { method: 'DELETE' });
+            onLoad();
+        } catch (error) {
+            console.error('Error deleting book:', error);
+        }
+    }
 
-        // bonus auto refresh
-        await loadAllBooks();
+    function clearTable() {
+        tableBodyRef.innerHTML = '';
     }
 }
 
-async function deleteBook(id) {
-    await request(`http://localhost:3030/jsonstore/collections/books/${id}`, {
-        method: 'delete',
-    });
-
-    // bonus auto refresh
-    await loadAllBooks();
-}
-
-async function loadBookForEditting(bookId) {
-    const book = await request(`http://localhost:3030/jsonstore/collections/books/${bookId}`);
-
-    document.querySelector('#editForm [name="id"]').value = bookId;
-    document.querySelector('#editForm [name="title"]').value = book.title;
-    document.querySelector('#editForm [name="author"]').value = book.author;
-}
-
-function createElement(type, content, attributes = []) {
-    const element = document.createElement(type);
-
-    if (content) {
-        element.textContent = content;
-    }
-
-    if (attributes.length > 0) {
-        element.setAttribute(attributes[0], attributes[1]);
-    }
-
-    return element;
-}
+solve();

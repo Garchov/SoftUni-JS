@@ -1,0 +1,30 @@
+{
+  "name": "05.-architecture-and-testing",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "node mocha test.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/mocha": "^10.0.7",
+    "chai": "^5.1.1",
+    "mocha": "^10.7.0",
+    "playwright": "^1.45.3",
+    "playwright-chromium": "^1.45.3",
+    "test.js": "^1.0.0"
+  },
+  "dependencies": {
+    "assertion-error": "^2.0.1",
+    "check-error": "^2.1.1",
+    "deep-eql": "^5.0.2",
+    "get-func-name": "^2.0.2",
+    "loupe": "^3.1.1",
+    "pathval": "^2.0.0",
+    "playwright-core": "^1.45.1"
+  },
+  "description": ""
+}

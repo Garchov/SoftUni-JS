@@ -1,0 +1,24 @@
+{
+  "name": "02.http-status-cats",
+  "version": "1.0.0",
+  "main": "app.js",
+  "directories": {
+    "test": "tests"
+  },
+  "type": "module",
+  "scripts": {
+    "test": "mocha tests/e2e.test.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "chai": "^5.1.1",
+    "mocha": "^10.7.0",
+    "playwright-chromium": "^1.46.0"
+  },
+  "dependencies": {
+    "lit-html": "^3.2.0"
+  }
+}

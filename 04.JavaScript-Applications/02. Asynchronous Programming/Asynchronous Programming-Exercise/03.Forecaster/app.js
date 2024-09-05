@@ -93,6 +93,7 @@ function attachEvents() {
             document.querySelector('div.forecast-info').remove();
         }
 
+        debugger
         const divForecastInfo = createElement('div', '', ['class', 'forecast-info']);
 
         for (const forecast of data.forecast) {

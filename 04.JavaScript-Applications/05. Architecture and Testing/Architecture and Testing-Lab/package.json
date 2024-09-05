@@ -1,0 +1,16 @@
+{
+  "name": "architecture-and-testing-lab",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "node mocha test.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "playwright-chromium": "^1.45.3"
+  }
+}

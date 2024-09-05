@@ -1,0 +1,19 @@
+{
+  "name": "client-side-rendering-lab-resources",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha tests/**/*.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "lit-html": "^3.1.4"
+  },
+  "description": "",
+  "devDependencies": {
+    "playwright": "^1.45.3",
+    "playwright-chromium": "^1.45.3"
+  }
+}

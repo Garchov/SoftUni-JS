@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Has Routing Demo</title>
+    <script type="module" src="./src/page-router.js"></script>
+</head>
+<style>
+section {
+    display: none;
+}
+
+</style>
+<body>
+    <nav>
+<a href=/home-section>Home</a>
+<a href=/catalog-section>Catalog</a>
+<a href=/about-section>About</a>
+<a href=/login>Login</a>
+    </nav>
+
+
+    <h1>Has Routing</h1>
+ 
+    <section id="home">
+        <h2>Home Page</h2>
+    </section>
+
+    <section id="about">
+ <h2>About Page</h2>
+    </section>
+
+    <section id="catalog">
+<h2>Catalog Page</h2>
+<a href="/details/1">Details 1</a>
+<a href="/details/2">Details 2</a>
+<a href="/details/3">Details 3</a>
+<a href="/details/4">Details 4</a>
+    </section>
+
+    <section id="details">
+<h2>Product details</h2>
+<p>Product details</p>
+    </section>
+
+    <section id="login">
+<h2>Login Page</h2>
+<button>Login</button>
+    
+</section>
+
+
+</body>
+</html>

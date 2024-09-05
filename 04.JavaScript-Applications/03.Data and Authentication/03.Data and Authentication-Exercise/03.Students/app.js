@@ -1,66 +1,62 @@
-function start() {
-    getAllStudents();
+async function students() {
 
-    document.getElementById('form').addEventListener('submit', createStudent);
-}
+    const formRef = document.getElementById('form');
+    const bodyRef = document.querySelector('tbody');
+    const submitBtn = document.getElementById('submit');
+    submitBtn.addEventListener('click', onSubmit);
 
-start();
+    const URL = 'http://localhost:3030/jsonstore/collections/students';
 
-async function request(url, options) {
-    const response = await fetch(url, options);
-
-    if (response.ok != true) {
-        const error = await response.json();
-        alert(error.message);
-        throw new Error(error.message);
-    }
-
+    const response = await fetch(URL);
     const data = await response.json();
-    return data;
-}
 
-async function getAllStudents() {
-    const students = await request('http://localhost:3030/jsonstore/collections/students');
+    Object.values(data).forEach(user => {
+        const trEl = document.createElement('tr');
+        const fNameTd = document.createElement('td');
+        fNameTd.textContent = user.firstName;
+        const lNameTd = document.createElement('td');
+        lNameTd.textContent = user.lastName;
+        const fNumTd = document.createElement('td');
+        fNumTd.textContent = user.facultyNumber;
+        const gradeTd = document.createElement('td');
+        gradeTd.textContent = Number(user.grade).toFixed(2);
 
-    const rows = Object.values(students).map(createRow).join('');
+        trEl.appendChild(fNameTd);
+        trEl.appendChild(lNameTd);
+        trEl.appendChild(fNumTd);
+        trEl.appendChild(gradeTd);
+        bodyRef.appendChild(trEl);
+    })
 
-    document.querySelector('tbody').innerHTML = rows;
-}
+    async function onSubmit(event) {
+        event.preventDefault();
 
-function createRow(student) {
-    return `<tr>
-        <td>${student.firstName}</td>
-        <td>${student.lastName}</td>
-        <td>${student.facultyNumber}</td>
-        <td>${student.grade.toFixed(2)}</td>
-    </tr>`;
-}
+        const formData = new FormData(formRef);
+        const firstName = formData.get('firstName');
+        const lastName = formData.get('lastName');
+        const facultyNumber = formData.get('facultyNumber');
+        const grade = formData.get('grade');
 
-async function createStudent(event) {
-    event.preventDefault();
+        if (!firstName || !lastName || !facultyNumber || !grade) {
+            return;
+        }
 
-    var formData = new FormData(event.target);
+        const newUser = { firstName, lastName, facultyNumber, grade };
 
-    const firstName = formData.get('firstName');
-    const lastName = formData.get('lastName');
-    const facultyNumber = formData.get('facultyNumber');
-    const grade = Number(formData.get('grade'));
+        const option = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newUser)
+        }
+        const postResponse = await fetch(URL, option);
 
-    if (firstName && lastName && facultyNumber && Number(grade)) {
-        const student = {
-            firstName,
-            lastName,
-            facultyNumber,
-            grade,
-        };
+        location.reload();
+        formRef.reset();
 
-        await request('http://localhost:3030/jsonstore/collections/students', {
-            method: 'post',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(student),
-        });
-
-        event.target.reset();
-        getAllStudents();
     }
+
 }
+
+students();
